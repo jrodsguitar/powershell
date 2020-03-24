@@ -7,20 +7,20 @@ $newpowershellprocess = New-Object System.Diagnostics.ProcessStartInfo "PowerShe
 #Promt for username and password.
 $username = Read-Host "Enter username"
 $password = Read-Host  -AsSecureString "Enter Password"
-#$creds = New-Object System.Management.Automation.PSCredential($username, $password)
+$creds =   New-Object System.Management.Automation.PSCredential($username,$password)
 
 #Logic to populate username
-if ($username -like "*\*") {
+if($username -like "*\*"){
 
     $newpowershellprocessDomain = ($username -split '\\')[0]
     $newpowershellprocessUserName = ($username -split '\\')[1]
 
-}
-else {
+}else{
 
-    $newpowershellprocessUserName = $username
+$newpowershellprocessUserName = $username
 
 }
+
 
 #Populate newprocess properties
 $newpowershellprocess.Arguments = "-noprofile -command &{start-process powershell.exe -verb runas }"
@@ -35,6 +35,9 @@ $newpowershellprocess.Verb = "runas"
 # Start process
 [System.Diagnostics.Process]::Start($newpowershellprocess)
 
+
 #The punchline here is that the below line also does the same things as lines 10-20 above.
 #Left here as an example of how to do the same thing in powershell in a different manner
 #Start-Process powershell -Credential $creds -ArgumentList '-noprofile -command &{Start-Process powershell -verb runas}'
+
+
