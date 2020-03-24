@@ -1,5 +1,7 @@
 #Script by Jose Rodriguez
 #3/23/2020
+#Starts an elevated shell as a different user.
+
 # New PS Process
 $newpowershellprocess = New-Object System.Diagnostics.ProcessStartInfo "PowerShell";
 
