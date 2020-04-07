@@ -6,7 +6,6 @@
 
 #-
 #Computer to connect to
-
 $computer = 'server123'
 
 #Utilize the WMI Win32_NetworkAdapterConfiguration class to return network adapter configuration. We filter on 'ipenabled'.
