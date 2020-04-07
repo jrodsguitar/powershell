@@ -5,17 +5,17 @@
 ##Description of each step is in the inline comments of the script below##
 
 #-
-##Computer to connect to##
+#Computer to connect to
 
 $computer = 'server123'
 
-##Utilize the WMI Win32_NetworkAdapterConfiguration class to return network adapter configuration. We filter on 'ipenabled'.##
+#Utilize the WMI Win32_NetworkAdapterConfiguration class to return network adapter configuration. We filter on 'ipenabled'.
 $networkAdapterInfo = (Get-WmiObject -CN $computer -Class Win32_NetworkAdapterConfiguration  -Filter 'ipenabled = "true"')
     
-##This filters out the IPv6 address by using a regex pattern then replaces the 'ipaddress' field from our existing $networkAdapterInfo object with the IPv4 address##
+#This filters out the IPv6 address by using a regex pattern then replaces the 'ipaddress' field from our existing $networkAdapterInfo object with the IPv4 address
 $networkAdapterInfo.ipaddress = $networkAdapterInfo.IPAddress.ForEach({($_ | select-string -pattern "(\d{1,3}(\.?)){4}")})
     
-##Return the information we just gathered##
+#Return the information we just gathered
 $networkAdapterInfo
 #-
 
