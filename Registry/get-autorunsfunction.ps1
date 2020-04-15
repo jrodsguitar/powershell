@@ -85,26 +85,37 @@
                  "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\SharedTaskScheduler",
                  "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Windows\AppInit_DLLs")
  
-                 $keys | Foreach {((Get-Item $_ -ErrorAction Ignore))}
- 
+                 $results = $keys | Foreach {((Get-Item $_ -ErrorAction Ignore))}
+             
+                 foreach($item in $results){
+                
+                 if($item.property){
+                 
+                 $executablepath = (Get-ItemPropertyValue -ErrorAction SilentlyContinue -name $item.property -Path "Microsoft.PowerShell.Core\Registry::$($item.name)") 
+                  $path = (($executablepath -replace '\"\s.+$') -replace '^"') -replace '"+'
+                 
+                 $results +=  $item | Add-Member -MemberType  noteProperty -Name 'executablepath' -Value $path
+                 }
+                 }
+                 
+                 return $results   
          }
          
          catch{<#add error catch messages here... on my to do list#>}
      
      }
  
-     $results = (Invoke-Command -ComputerName $thing -ScriptBlock $command)
-    
+     $results = (Invoke-Command -ComputerName localhost -ScriptBlock $command)
+     
      #somehow here or below in the $datasets I am trying to add in the actual path in the registry.
- 
      $DataSets+= @(
      Foreach ($result in $results){
-         foreach($app in $result.property){
+         foreach($app in $result.executablepath){
          
              New-Object PSObject -Property @{
              ComputerName=$thing;
-            'AutoRun Application'= $app
-             Path = $result     
+                 'AutoRun Application'= ($app -replace '^(.*[\\\/])') -replace '\.exe+'
+             Path = $app  
          
              }
          }
@@ -112,4 +123,5 @@
      )
  }
  $DataSets | Export-Csv $OutputPath -NoTypeInformation
- } 
+ }
+ 
