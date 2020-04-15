@@ -86,31 +86,26 @@
                  "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Windows\AppInit_DLLs")
  
                  $results = $keys | Foreach {((Get-Item $_ -ErrorAction Ignore))}
-             
-                
- 
+
                  foreach($item in $results)
-                 {
-                
+                 {                
                      if($item.property)
                      {
                  
-                     $executablepath = (Get-ItemPropertyValue -ErrorAction SilentlyContinue -name $item.property -Path "Microsoft.PowerShell.Core\Registry::$($item.name)") 
-                     $path = ($executablepath)
+                        $executablepath = (Get-ItemPropertyValue -ErrorAction SilentlyContinue -name $item.property -Path "Microsoft.PowerShell.Core\Registry::$($item.name)") 
+                        $path = ($executablepath)
                  
-                         if($path -ne 0)
+                        if($path -ne 0)
                          {
                              $results += $item | Add-Member -MemberType  noteProperty -Name 'executablepath' -Value $path
                          }
                      }
                  }
                  
-                 return $results
-         
+                 return $results         
          }
          
-         catch{<#add error catch messages here... on my to do list#>}
-     
+        catch{<#add error catch messages here... on my to do list#>}    
         }
  
      $results = (Invoke-Command -ComputerName $thing -ScriptBlock $command)
