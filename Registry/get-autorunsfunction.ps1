@@ -96,7 +96,7 @@
                      {
                  
                      $executablepath = (Get-ItemPropertyValue -ErrorAction SilentlyContinue -name $item.property -Path "Microsoft.PowerShell.Core\Registry::$($item.name)") 
-                     $path = (($executablepath -replace '\"\s.+$') -replace '^"') -replace '"+'
+                     $path = ($executablepath)
                  
                          if($path -ne 0)
                          {
@@ -124,7 +124,7 @@
          
              New-Object PSObject -Property @{
              ComputerName=$thing;
-                 'AutoRun Application'= ($app -replace '^(.*[\\\/])') -replace '\.exe+'
+                 'AutoRun Application'= ((($app -replace '\"\s.+$') -replace '^(.*[\\\/])') -replace '\.exe+') -replace '"+'
              Path = $app  
          
              }
@@ -132,5 +132,5 @@
      }
      )
  }
- $DataSets | Export-Csv $OutputPath -NoTypeInformation
- }
+$DataSets #| Export-Csv $OutputPath -NoTypeInformation
+}
