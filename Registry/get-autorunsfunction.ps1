@@ -119,7 +119,7 @@
          
              New-Object PSObject -Property @{
              ComputerName=$thing;
-                 'AutoRun Application'= ((($app -replace '\"\s.+$') -replace '^(.*[\\\/])') -replace '\.exe+') -replace '"+'
+            'AutoRun Application'= ((($app -replace '\"\s.+$') -replace '^(.*[\\\/])') -replace '\.exe+') -replace '"+'
              Path = $app  
          
              }
