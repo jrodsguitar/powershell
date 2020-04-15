@@ -132,5 +132,5 @@
      }
      )
  }
-$DataSets #| Export-Csv $OutputPath -NoTypeInformation
+$DataSets | Export-Csv $OutputPath -NoTypeInformation
 }
